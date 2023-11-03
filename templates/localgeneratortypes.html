@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalGeneratorTypes Table</title>
+</head>
+<body>
+    <h1>Tables</h1>
+    <ul>
+        {% for table in tables %}
+            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
+        {% endfor %}
+    </ul>
+    <h1>LocalGeneratorTypes Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Generator Type ID</th>
+                <th>Type</th>
+                <th>Output Load</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Rooftop Solar</td>
+                <td>50.00</td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="#" method="post">
+        <label for="generatorTypeID">Generator Type ID:</label><br>
+        <input type="text" id="generatorTypeID" name="generatorTypeID"><br><br>
+        
+        <label for="type">Type:</label><br>
+        <input type="text" id="type" name="type" maxlength="63"><br><br>
+        
+        <label for="outputLoad">Output Load:</label><br>
+        <input type="text" id="outputLoad" name="outputLoad"><br><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

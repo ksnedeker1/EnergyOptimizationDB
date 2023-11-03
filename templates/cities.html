@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cities Table</title>
+</head>
+<body>
+    <h1>Tables</h1>
+    <ul>
+        {% for table in tables %}
+            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
+        {% endfor %}
+    </ul>
+    <h1>Cities Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>City ID</th>
+                <th>Name</th>
+                <th>Population</th>
+                <th>Energy Demand</th>
+                <th>Current Load</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Snedekeria</td>
+                <td>3,200,000</td>
+                <td>2922.37</td>
+                <td>3200</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Ngopolis</td>
+                <td>2,000,000</td>
+                <td>1826.48</td>
+                <td>1900</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Databaseburg</td>
+                <td>400,000</td>
+                <td>365.30</td>
+                <td>400</td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="#" method="post">
+        <label for="cityID">City ID:</label><br>
+        <input type="text" id="cityID" name="cityID"><br><br>
+        
+        <label for="name">City Name:</label><br>
+        <input type="text" id="name" name="name" maxlength="255"><br><br>
+        
+        <label for="population">Population:</label><br>
+        <input type="text" id="population" name="population"><br><br>
+        
+        <label for="energyDem">Energy Demand:</label><br>
+        <input type="text" id="energyDem" name="energyDem"><br><br>
+    
+        <label for="currentLoad">Current Load:</label><br>
+        <input type="text" id="currentLoad" name="currentLoad"><br><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

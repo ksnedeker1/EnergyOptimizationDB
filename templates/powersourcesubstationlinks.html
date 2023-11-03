@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerSourceSubstationLinks Table</title>
+</head>
+<body>
+    <h1>Tables</h1>
+    <ul>
+        {% for table in tables %}
+            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
+        {% endfor %}
+    </ul>
+    <h1>PowerSourceSubstationLinks Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Link ID</th>
+                <th>Power Source ID</th>
+                <th>Substation ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>3</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>4</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>5</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>6</td>
+                <td>4</td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="#" method="post">
+        <label for="linkID">Link ID:</label>
+        <input type="number" id="linkID" name="linkID"><br><br>
+        
+        <label for="powerSourceID">Power Source ID:</label>
+        <input type="number" id="powerSourceID" name="powerSourceID"><br><br>
+    
+        <label for="substationID">Substation ID:</label>
+        <input type="number" id="substationID" name="substationID"><br><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

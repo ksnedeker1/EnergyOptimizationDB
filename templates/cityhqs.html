@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityHQs Table</title>
+</head>
+<body>
+    <h1>Tables</h1>
+    <ul>
+        {% for table in tables %}
+            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
+        {% endfor %}
+    </ul>
+    <h1>CityHQs Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>HQ ID</th>
+                <th>City ID</th>
+                <th>Consumption Policy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>0.50</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>0.50</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>3</td>
+                <td>0.50</td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="#" method="post">
+        <label for="hqID">HQ ID:</label><br>
+        <input type="number" id="hqID" name="hqID" required><br><br>
+        
+        <label for="cityID">City ID:</label><br>
+        <input type="number" id="cityID" name="cityID" required><br><br>
+        
+        <label for="consumptionPolicy">Consumption Policy:</label><br>
+        <input type="number" id="consumptionPolicy" name="consumptionPolicy" step="0.01" required><br><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

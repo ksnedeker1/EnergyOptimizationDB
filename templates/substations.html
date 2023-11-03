@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Substations Table</title>
+</head>
+<body>
+    <h1>Tables</h1>
+    <ul>
+        {% for table in tables %}
+            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
+        {% endfor %}
+    </ul>
+    <h1>Substations Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Substation ID</th>
+                <th>Name</th>
+                <th>Current Load</th>
+                <th>Substation Type ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>SnNgSub1</td>
+                <td>2400</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>SnSub1</td>
+                <td>2000</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>NgSub1</td>
+                <td>700</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>DaSub1</td>
+                <td>250</td>
+                <td>3</td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="#" method="post">
+        <label for="substationID">Substation ID:</label><br>
+        <input type="number" id="substationID" name="substationID" required><br><br>
+        
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="currentLoad">Current Load:</label><br>
+        <input type="number" id="currentLoad" name="currentLoad" step="0.01" required><br><br>
+        
+        <label for="substationTypeID">Substation Type ID:</label><br>
+        <input type="number" id="substationTypeID" name="substationTypeID" required><br><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

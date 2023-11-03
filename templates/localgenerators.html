@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalGenerators Table</title>
+</head>
+<body>
+    <h1>Tables</h1>
+    <ul>
+        {% for table in tables %}
+            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
+        {% endfor %}
+    </ul>
+    <h1>LocalGenerators Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Generator ID</th>
+                <th>City ID</th>
+                <th>Generator Type ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>3</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>3</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>3</td>
+                <td>1</td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="#" method="post">
+        <label for="generatorID">Generator ID:</label><br>
+        <input type="text" id="generatorID" name="generatorID"><br><br>
+        
+        <label for="cityID">City ID:</label><br>
+        <input type="text" id="cityID" name="cityID"><br><br>
+        
+        <label for="generatorTypeID">Generator Type ID:</label><br>
+        <input type="text" id="generatorTypeID" name="generatorTypeID"><br><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
