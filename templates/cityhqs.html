@@ -1,55 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CityHQs Table</title>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
+
+{% block title %}CityHQs Table{% endblock %}
+
+{% block content %}
     <h1>CityHQs Table</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>HQ ID</th>
-                <th>City ID</th>
-                <th>Consumption Policy</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>0.50</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>2</td>
-                <td>0.50</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>3</td>
-                <td>0.50</td>
-            </tr>
-        </tbody>
-    </table>
-    <form action="#" method="post">
-        <label for="hqID">HQ ID:</label><br>
-        <input type="number" id="hqID" name="hqID" required><br><br>
-        
-        <label for="cityID">City ID:</label><br>
-        <input type="number" id="cityID" name="cityID" required><br><br>
-        
-        <label for="consumptionPolicy">Consumption Policy:</label><br>
-        <input type="number" id="consumptionPolicy" name="consumptionPolicy" step="0.01" required><br><br>
-    
-        <input type="submit" value="Submit">
+    <form action="{{ url_for('update_city_hqs') }}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>HQ ID</th>
+                    <th>City ID</th>
+                    <th>Consumption Policy</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td><input type="hidden" name="hq_id[]" value="{{ item.hq_id }}">{{ item.hq_id }}</td>
+                    <td><input type="text" name="city_id[]" value="{{ item.city_id }}"></td>
+                    <td><input type="text" name="consumption_policy[]" value="{{ item.consumption_policy }}"></td>
+                    <td>
+                        <button type="submit" formaction="{{ url_for('delete_city_hq') }}" formmethod="post" name="delete_hq_id" value="{{ item.hq_id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-action">
+            <input type="submit" value="Update CityHQs">
+        </div>
     </form>
-</body>
-</html>
+    <form action="{{ url_for('create_cityhq') }}" method="post" class="create-form">
+        <div class="form-group">
+            <label for="hq_id">HQ ID:</label>
+            <input type="text" id="hq_id" name="hq_id" required>
+        </div>
+        <div class="form-group">
+            <label for="city_id">City ID:</label>
+            <input type="text" id="city_id" name="city_id" required>
+        </div>
+        <div class="form-group">
+            <label for="consumption_policy">Consumption Policy:</label>
+            <input type="text" id="consumption_policy" name="consumption_policy" required>
+        </div>
+        <div class="form-action">
+            <input type="submit" value="Add CityHQ">
+        </div>
+    </form>
+{% endblock %}
