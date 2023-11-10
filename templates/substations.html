@@ -1,68 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Substations Table</title>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
+
+{% block title %}Substations Table{% endblock %}
+
+{% block content %}
     <h1>Substations Table</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Substation ID</th>
-                <th>Name</th>
-                <th>Current Load</th>
-                <th>Substation Type ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>SnNgSub1</td>
-                <td>2400</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>SnSub1</td>
-                <td>2000</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>NgSub1</td>
-                <td>700</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>DaSub1</td>
-                <td>250</td>
-                <td>3</td>
-            </tr>
-        </tbody>
-    </table>
-    <form action="#" method="post">
-        <label for="substationID">Substation ID:</label><br>
-        <input type="number" id="substationID" name="substationID" required><br><br>
-        
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="currentLoad">Current Load:</label><br>
-        <input type="number" id="currentLoad" name="currentLoad" step="0.01" required><br><br>
-        
-        <label for="substationTypeID">Substation Type ID:</label><br>
-        <input type="number" id="substationTypeID" name="substationTypeID" required><br><br>
-    
-        <input type="submit" value="Submit">
+    <form action="{{ url_for('update_substations') }}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Substation ID</th>
+                    <th>Name</th>
+                    <th>Current Load</th>
+                    <th>Substation Type ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td><input type="hidden" name="substation_id[]" value="{{ item.substation_id }}">{{ item.substation_id }}</td>
+                    <td><input type="text" name="name[]" value="{{ item.name }}"></td>
+                    <td><input type="text" name="current_load[]" value="{{ item.current_load }}"></td>
+                    <td><input type="text" name="substation_type_id[]" value="{{ item.substation_type_id }}"></td>
+                    <td>
+                        <button type="submit" formaction="{{ url_for('delete_substation') }}" formmethod="post" name="delete_substation_id" value="{{ item.substation_id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-action">
+            <input type="submit" value="Update Substations">
+        </div>
     </form>
-</body>
-</html>
+    <form action="{{ url_for('create_substation') }}" method="post" class="create-form">
+        <div class="form-group">
+            <label for="substation_id">Substation ID:</label>
+            <input type="text" id="substation_id" name="substation_id" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="current_load">Current Load:</label>
+            <input type="text" id="current_load" name="current_load" required>
+        </div>
+        <div class="form-group">
+            <label for="substation_type_id">Substation Type ID:</label>
+            <input type="text" id="substation_type_id" name="substation_type_id" required>
+        </div>
+        <div class="form-action">
+            <input type="submit" value="Add Substation">
+        </div>
+    </form>
+{% endblock %}
