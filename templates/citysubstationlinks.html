@@ -1,65 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CitySubstationLinks Table</title>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
+
+{% block title %}CitySubstationLinks Table{% endblock %}
+
+{% block content %}
     <h1>CitySubstationLinks Table</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Link ID</th>
-                <th>Substation ID</th>
-                <th>City ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>1</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>2</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>3</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>4</td>
-                <td>3</td>
-            </tr>
-        </tbody>
-    </table>
-    <form action="#" method="post">
-        <label for="linkID">Link ID:</label><br>
-        <input type="number" id="linkID" name="linkID" required><br><br>
-        
-        <label for="substationID">Substation ID:</label><br>
-        <input type="number" id="substationID" name="substationID" required><br><br>
-        
-        <label for="cityID">City ID:</label><br>
-        <input type="number" id="cityID" name="cityID" required><br><br>
-    
-        <input type="submit" value="Submit">
+    <form action="{{ url_for('update_city_substation_links') }}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Link ID</th>
+                    <th>Substation ID</th>
+                    <th>City ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td><input type="hidden" name="link_id[]" value="{{ item.link_id }}">{{ item.link_id }}</td>
+                    <td><input type="text" name="substation_id[]" value="{{ item.substation_id }}"></td>
+                    <td><input type="text" name="city_id[]" value="{{ item.city_id }}"></td>
+                    <td>
+                        <button type="submit" formaction="{{ url_for('delete_city_substation_link') }}" formmethod="post" name="delete_link_id" value="{{ item.link_id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-action">
+            <input type="submit" value="Update CitySubstationLinks">
+        </div>
     </form>
-</body>
-</html>
+    <form action="{{ url_for('create_city_substation_link') }}" method="post" class="create-form">
+        <div class="form-group">
+            <label for="linkID">Link ID:</label>
+            <input type="number" id="linkID" name="linkID" required>
+        </div>
+        <div class="form-group">
+            <label for="substationID">Substation ID:</label>
+            <input type="number" id="substationID" name="substationID" required>
+        </div>
+        <div class="form-group">
+            <label for="cityID">City ID:</label>
+            <input type="number" id="cityID" name="cityID" required>
+        </div>
+        <div class="form-action">
+            <input type="submit" value="Add CitySubstationLink">
+        </div>
+    </form>
+{% endblock %}
