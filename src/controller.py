@@ -86,7 +86,7 @@ class Controller:
     def read_power_source_type(self, power_source_type_id):
         for data in self.power_source_types:
             if data.power_source_type_id == power_source_type_id:
-                return type
+                return data
         return None
 
     def update_power_source_type(self, power_source_type_id, type=None, output_load=None):
