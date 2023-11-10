@@ -82,7 +82,7 @@ def substationtypes():
 @app.route('/load_sample_data', methods=['POST'])
 def load_sample_data():
     controller.populate_from_sampledata(sampledata)
-    return redirect(url_for('root'))  # Redirect to the home page after loading the data
+    return redirect(url_for('root'))
 
 
 @app.route('/clear_database', methods=['POST'])
