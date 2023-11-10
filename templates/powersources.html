@@ -1,70 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowerSources Table</title>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
+
+{% block title %}PowerSources Table{% endblock %}
+
+{% block content %}
     <h1>PowerSources Table</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Power Source ID</th>
-                <th>Name</th>
-                <th>Power Source Type ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>LargeCoal1</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>LargeCoal2</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>LargeNuclear1</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>MediumHydro1</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>MediumSolar1</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>MediumSolar2</td>
-                <td>4</td>
-            </tr>
-        </tbody>
-    </table>
-    <form action="#" method="post">
-        <label for="powerSourceID">Power Source ID:</label>
-        <input type="number" id="powerSourceID" name="powerSourceID"><br><br>
-        
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name"><br><br>
-    
-        <label for="powerSourceTypeID">Power Source Type ID:</label>
-        <input type="number" id="powerSourceTypeID" name="powerSourceTypeID"><br><br>
-    
-        <input type="submit" value="Submit">
+    <form action="{{ url_for('update_power_sources') }}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Power Source ID</th>
+                    <th>Name</th>
+                    <th>Power Source Type ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td><input type="hidden" name="power_source_id[]" value="{{ item.power_source_id }}">{{ item.power_source_id }}</td>
+                    <td><input type="text" name="name[]" value="{{ item.name }}"></td>
+                    <td><input type="text" name="power_source_type_id[]" value="{{ item.power_source_type_id }}"></td>
+                    <td>
+                        <button type="submit" formaction="{{ url_for('delete_power_source') }}" formmethod="post" name="delete_power_source_id" value="{{ item.power_source_id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-action">
+            <input type="submit" value="Update Power Sources">
+        </div>
     </form>
-</body>
-</html>
+    <form action="{{ url_for('create_power_source') }}" method="post" class="create-form">
+        <div class="form-group">
+            <label for="power_source_id">Power Source ID:</label>
+            <input type="text" id="power_source_id" name="power_source_id" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="power_source_type_id">Power Source Type ID:</label>
+            <input type="text" id="power_source_type_id" name="power_source_type_id" required>
+        </div>
+        <div class="form-action">
+            <input type="submit" value="Add Power Source">
+        </div>
+    </form>
+{% endblock %}
