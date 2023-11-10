@@ -1,69 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cities Table</title>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
-    <h1>Cities Table</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>City ID</th>
-                <th>Name</th>
-                <th>Population</th>
-                <th>Energy Demand</th>
-                <th>Current Load</th>
-            </tr>
-        </thead>
+{% extends "base.html" %}
+
+{% block title %}Cities Table{% endblock %}
+
+{% block content %}
+<h1>Cities Table</h1>
+    <form action="{{ url_for('update_cities') }}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>City ID</th>
+                    <th>Name</th>
+                    <th>Population</th>
+                    <th>Energy Demand</th>
+                    <th>Current Load</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
         <tbody>
+            {% for item in data %}
             <tr>
-                <td>1</td>
-                <td>Snedekeria</td>
-                <td>3,200,000</td>
-                <td>2922.37</td>
-                <td>3200</td>
+                <td><input type="hidden" name="city_id[]" value="{{ item.city_id }}">{{ item.city_id }}</td>
+                <td><input type="text" name="name[]" value="{{ item.name }}"></td>
+                <td><input type="text" name="population[]" value="{{ item.population }}"></td>
+                <td><input type="text" name="energy_demand[]" value="{{ item.energy_demand }}"></td>
+                <td><input type="text" name="current_load[]" value="{{ item.current_load }}"></td>
+                <td>
+                    <!-- Delete button correction -->
+                    <button type="submit" formaction="{{ url_for('delete_city') }}" formmethod="post" name="delete_city_id" value="{{ item.city_id }}">Delete</button>
+                </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Ngopolis</td>
-                <td>2,000,000</td>
-                <td>1826.48</td>
-                <td>1900</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Databaseburg</td>
-                <td>400,000</td>
-                <td>365.30</td>
-                <td>400</td>
-            </tr>
+            {% endfor %}
         </tbody>
-    </table>
-    <form action="#" method="post">
-        <label for="cityID">City ID:</label><br>
-        <input type="text" id="cityID" name="cityID"><br><br>
-        
-        <label for="name">City Name:</label><br>
-        <input type="text" id="name" name="name" maxlength="255"><br><br>
-        
-        <label for="population">Population:</label><br>
-        <input type="text" id="population" name="population"><br><br>
-        
-        <label for="energyDem">Energy Demand:</label><br>
-        <input type="text" id="energyDem" name="energyDem"><br><br>
-    
-        <label for="currentLoad">Current Load:</label><br>
-        <input type="text" id="currentLoad" name="currentLoad"><br><br>
-    
-        <input type="submit" value="Submit">
+        </table>
+        <div class="form-action">
+            <input type="submit" value="Update Cities">
+        </div>
     </form>
-</body>
-</html>
+    <form action="{{ url_for('create_city') }}" method="post" class="create-form">
+        <div class="form-group">
+            <label for="city_id">City ID:</label>
+            <input type="text" id="city_id" name="city_id" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="population">Population:</label>
+            <input type="text" id="population" name="population" required>
+        </div>
+        <div class="form-group">
+            <label for="energy_demand">Energy Demand:</label>
+            <input type="text" id="energy_demand" name="energy_demand" required>
+        </div>
+        <div class="form-group">
+            <label for="current_load">Current Load:</label>
+            <input type="text" id="current_load" name="current_load" required>
+        </div>
+        <div class="form-action">
+            <input type="submit" value="Add City">
+        </div>
+    </form>
+{% endblock %}
