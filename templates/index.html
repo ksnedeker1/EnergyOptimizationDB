@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<h1>Home</h1>
+
+<form action="{{ url_for('load_sample_data') }}" method="post">
+    <input type="submit" value="Load Sample Data">
+</form>
+
+<form action="{{ url_for('clear_database') }}" method="post">
+    <input type="submit" value="Clear Database">
+</form>
+{% endblock %}
