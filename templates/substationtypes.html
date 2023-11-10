@@ -1,71 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SubstationTypes Table</title>
-    <style>
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            width: 300px;
-            margin-bottom: 20px;
-        }
-        label {
-            margin-bottom: 5px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
+
+{% block title %}SubstationTypes Table{% endblock %}
+
+{% block content %}
     <h1>SubstationTypes Table</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Substation Type ID</th>
-                <th>Size</th>
-                <th>Max Load</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Mega</td>
-                <td>2500.00</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Medium</td>
-                <td>1000.00</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Small</td>
-                <td>500.00</td>
-            </tr>
-        </tbody>
-    </table>
-    <form action="#" method="post">
-        <div class="input-container">
-            <label for="substationTypeID">Substation Type ID:</label>
-            <input type="number" id="substationTypeID" name="substationTypeID">
+    <form action="{{ url_for('update_substation_types') }}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Substation Type ID</th>
+                    <th>Size</th>
+                    <th>Max Load</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td><input type="hidden" name="substation_type_id[]" value="{{ item.substation_type_id }}">{{ item.substation_type_id }}</td>
+                    <td><input type="text" name="size[]" value="{{ item.size }}"></td>
+                    <td><input type="text" name="max_load[]" value="{{ item.max_load }}"></td>
+                    <td>
+                        <button type="submit" formaction="{{ url_for('delete_substation_type') }}" formmethod="post" name="delete_substation_type_id" value="{{ item.substation_type_id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-action">
+            <input type="submit" value="Update Substation Types">
         </div>
-
-        <div class="input-container">
-            <label for="type">Type:</label>
-            <input type="text" id="type" name="type" maxlength="63">
-        </div>
-
-        <div class="input-container">
-            <label for="maxload">Max Load:</label>
-            <input type="number" id="maxload" name="maxload" step="0.01" min="0">
-        </div>
-        <input type="submit" value="Submit">
     </form>
-</body>
-</html>
+    <form action="{{ url_for('create_substation_type') }}" method="post" class="create-form">
+        <div class="form-group">
+            <label for="substation_type_id">Substation Type ID:</label>
+            <input type="text" id="substation_type_id" name="substation_type_id" required>
+        </div>
+        <div class="form-group">
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size" required>
+        </div>
+        <div class="form-group">
+            <label for="max_load">Max Load:</label>
+            <input type="text" id="max_load" name="max_load" required>
+        </div>
+        <div class="form-action">
+            <input type="submit" value="Add Substation Type">
+        </div>
+    </form>
+{% endblock %}
