@@ -1,45 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LocalGeneratorTypes Table</title>
-</head>
-<body>
-    <h1>Tables</h1>
-    <ul>
-        {% for table in tables %}
-            <li><a href="{{ url_for(table.lower()) }}">{{ table }}</a></li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
+
+{% block title %}LocalGeneratorTypes Table{% endblock %}
+
+{% block content %}
     <h1>LocalGeneratorTypes Table</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Generator Type ID</th>
-                <th>Type</th>
-                <th>Output Load</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Rooftop Solar</td>
-                <td>50.00</td>
-            </tr>
-        </tbody>
-    </table>
-    <form action="#" method="post">
-        <label for="generatorTypeID">Generator Type ID:</label><br>
-        <input type="text" id="generatorTypeID" name="generatorTypeID"><br><br>
-        
-        <label for="type">Type:</label><br>
-        <input type="text" id="type" name="type" maxlength="63"><br><br>
-        
-        <label for="outputLoad">Output Load:</label><br>
-        <input type="text" id="outputLoad" name="outputLoad"><br><br>
-    
-        <input type="submit" value="Submit">
+    <form action="{{ url_for('update_local_generator_types') }}" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Generator Type ID</th>
+                    <th>Type</th>
+                    <th>Output Load</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td><input type="hidden" name="generator_type_id[]" value="{{ item.generator_type_id }}">{{ item.generator_type_id }}</td>
+                    <td><input type="text" name="type[]" value="{{ item.type }}"></td>
+                    <td><input type="text" name="output_load[]" value="{{ item.output_load }}" step="any"></td>
+                    <td>
+                        <button type="submit" formaction="{{ url_for('delete_local_generator_type') }}" formmethod="post" name="delete_generator_type_id" value="{{ item.generator_type_id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-action">
+            <input type="submit" value="Update Generator Types">
+        </div>
     </form>
-</body>
-</html>
+    <form action="{{ url_for('create_local_generator_type') }}" method="post" class="create-form">
+        <div class="form-group">
+            <label for="generator_type_id">Generator Type ID:</label>
+            <input type="text" id="generator_type_id" name="generator_type_id" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type" required>
+        </div>
+        <div class="form-group">
+            <label for="output_load">Output Load:</label>
+            <input type="text" id="output_load" name="output_load" required>
+        </div>
+        <div class="form-action">
+            <input type="submit" value="Add Generator Type">
+        </div>
+    </form>
+{% endblock %}
