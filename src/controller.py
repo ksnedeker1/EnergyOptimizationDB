@@ -1,4 +1,6 @@
 from src.tables import *
+from database.db_connector import connect_to_database, execute_query
+from database.dmq import *
 
 
 class Controller:
@@ -15,68 +17,84 @@ class Controller:
         self.substation_types = []
 
     def clear_all(self):
-        for item in reversed(self.cities):
-            self.delete_city(item.city_id)
+        self.cities = []
+        self.city_hqs = []
+        self.city_substation_links = []
+        self.local_generators = []
+        self.local_generator_types = []
+        self.power_sources = []
+        self.power_source_substation_links = []
+        self.power_source_types = []
+        self.substations = []
+        self.substation_types = []
 
-        for item in reversed(self.city_hqs):
-            self.delete_city_hq(item.hq_id)
+    # def load_db(self, sampledata):
+    #     self.clear_all()
 
-        for item in reversed(self.city_substation_links):
-            self.delete_city_substation_link(item.link_id)
+    #     for data in sampledata['cities']:
+    #         self.create_city(**data)
 
-        for item in reversed(self.local_generators):
-            self.delete_local_generator(item.generator_id)
+    #     for data in sampledata['cityhqs']:
+    #         self.create_city_hq(**data)
 
-        for item in reversed(self.local_generator_types):
-            self.delete_local_generator_type(item.generator_type_id)
+    #     for data in sampledata['citysubstationlinks']:
+    #         self.create_city_substation_link(**data)
 
-        for item in reversed(self.power_sources):
-            self.delete_power_source(item.power_source_id)
+    #     for data in sampledata['localgenerators']:
+    #         self.create_local_generator(**data)
 
-        for item in reversed(self.power_source_substation_links):
-            self.delete_power_source_substation_link(item.link_id)
+    #     for data in sampledata['localgeneratortypes']:
+    #         self.create_local_generator_type(**data)
 
-        for item in reversed(self.power_source_types):
-            self.delete_power_source_type(item.power_source_type_id)
+    #     for data in sampledata['powersources']:
+    #         self.create_power_source(**data)
 
-        for item in reversed(self.substations):
-            self.delete_substation(item.substation_id)
+    #     for data in sampledata['powersourcesubstationlinks']:
+    #         self.create_power_source_substation_link(**data)
 
-        for item in reversed(self.substation_types):
-            self.delete_substation_type(item.substation_type_id)
+    #     for data in sampledata['powersourcetypes']:
+    #         self.create_power_source_type(**data)
 
-    def populate_from_sampledata(self, sampledata):
+    #     for data in sampledata['substations']:
+    #         self.create_substation(**data)
+
+    #     for data in sampledata['substationtypes']:
+    #         self.create_substation_type(**data)
+
+    def load_db(self):
         self.clear_all()
-
-        for data in sampledata['cities']:
-            self.create_city(**data)
-
-        for data in sampledata['cityhqs']:
-            self.create_city_hq(**data)
-
-        for data in sampledata['citysubstationlinks']:
-            self.create_city_substation_link(**data)
-
-        for data in sampledata['localgenerators']:
-            self.create_local_generator(**data)
-
-        for data in sampledata['localgeneratortypes']:
-            self.create_local_generator_type(**data)
-
-        for data in sampledata['powersources']:
-            self.create_power_source(**data)
-
-        for data in sampledata['powersourcesubstationlinks']:
-            self.create_power_source_substation_link(**data)
-
-        for data in sampledata['powersourcetypes']:
-            self.create_power_source_type(**data)
-
-        for data in sampledata['substations']:
-            self.create_substation(**data)
-
-        for data in sampledata['substationtypes']:
-            self.create_substation_type(**data)
+        db_connection = connect_to_database()
+        data = execute_query(db_connection, r_power_sources).fetchall()
+        for row in data:
+            self.power_sources.append(PowerSource(*list(row.values())))
+        data = execute_query(db_connection, r_substations).fetchall()
+        for row in data:
+            self.substations.append(Substation(*list(row.values())))
+        data = execute_query(db_connection, r_cities).fetchall()
+        for row in data:
+            self.cities.append(City(*list(row.values())))
+        data = execute_query(db_connection, r_local_generators).fetchall()
+        for row in data:
+            self.local_generators.append(LocalGenerator(*list(row.values())))
+        data = execute_query(db_connection, r_city_hqs).fetchall()
+        for row in data:
+            self.city_hqs.append(CityHQ(*list(row.values())))
+        data = execute_query(db_connection, r_power_source_substation_links).fetchall()
+        for row in data:
+            self.power_source_substation_links.append(PowerSourceSubstationLink(*list(row.values())))
+        data = execute_query(db_connection, r_city_substation_links).fetchall()
+        for row in data:
+            self.city_substation_links.append(CitySubstationLink(*list(row.values())))
+        data = execute_query(db_connection, r_local_generator_types).fetchall()
+        for row in data:
+            self.local_generator_types.append(LocalGeneratorType(*list(row.values())))
+        data = execute_query(db_connection, r_power_source_types).fetchall()
+        for row in data:
+            self.power_source_types.append(PowerSourceType(*list(row.values())))
+        data = execute_query(db_connection, r_substation_types).fetchall()
+        for row in data:
+            self.substation_types.append(SubstationType(*list(row.values())))
+        db_connection.close()
 
     # CRUD for PowerSourceType ###################################################################
     def create_power_source_type(self, power_source_type_id, type, output_load):
@@ -264,30 +282,37 @@ class Controller:
         return False
 
     # CRUD for CitySubstationLink ##################################################################
-    def create_city_substation_link(self, link_id, city_id, substation_id):
-        data = CitySubstationLink(link_id, city_id, substation_id)
-        self.city_substation_links.append(data)
+    def create_city_substation_link(self, substation_id, city_id):
+        db_connection = connect_to_database()
+        execute_query(db_connection, c_city_substation_link, (city_id, substation_id))
+        db_connection.close()
+        self.load_db()
 
     def read_city_substation_link(self, link_id):
-        for data in self.city_substation_links:
-            if data.link_id == link_id:
-                return data
-        return None
+        db_connection = connect_to_database()
+        data = execute_query(db_connection, r_city_substation_link, (link_id))
+        db_connection.close()
+        data = data.fetchall()
+        return data
 
     def update_city_substation_link(self, link_id, city_id=None, substation_id=None):
         data = self.read_city_substation_link(link_id)
         if data:
-            data.city_id = city_id if city_id is not None else data.city_id
-            data.substation_id = substation_id if substation_id is not None else data.substation_id
+            new_substation_id = substation_id if substation_id is not None else current_data['substationID']
+            new_city_id = city_id if city_id is not None else current_data['cityID']
+            db_connection = connect_to_database()
+            execute_query(db_connection, u_city_substation_link, (new_city_id, new_substation_id, link_id))
+            db_connection.close()
+            self.load_db()
             return True
         return False
 
     def delete_city_substation_link(self, link_id):
-        data = self.read_city_substation_link(link_id)
-        if data:
-            self.city_substation_links.remove(data)
-            return True
-        return False
+        db_connection = connect_to_database()
+        print(link_id)
+        execute_query(db_connection, d_city_substation_link, (link_id))
+        db_connection.close()
+        self.load_db()
 
     # CRUD for LocalGeneratorType ############################################################
     def create_local_generator_type(self, generator_type_id, type, output_load):
