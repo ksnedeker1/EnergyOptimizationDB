@@ -1,25 +1,40 @@
 # Adapted from https://github.com/osu-cs340-ecampus/flask-starter-app
 from flask import Flask, render_template, redirect, request, url_for
-# from flask_mysqldb import MySQL
+from flask_mysqldb import MySQL
 from src.resources.sampledata import sampledata
 from src.controller import Controller
+from database.db_credentials import host, user, passwd, db
+from database.db_connector import connect_to_database, execute_query
+import os
 
 app = Flask(__name__)
 
-# app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
-# app.config['MYSQL_USER'] = 'cs340_snedekek'
-# app.config['MYSQL_PASSWORD'] = '2194'
-# app.config['MYSQL_DB'] = 'cs340_snedekek'
-# app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+app.config['MYSQL_HOST'] = host
+app.config['MYSQL_USER'] = user
+app.config['MYSQL_PASSWORD'] = passwd
+app.config['MYSQL_DB'] = db
+app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
 
-# mysql = MySQL(app)
+mysql = MySQL(app)
 
-tables = ['PowerSources', 'Substations', 'Cities', 'LocalGenerators', 'CityHQs', 'PowerSourceSubstationLinks', 
+def init_db():
+    db_connection = connect_to_database()
+    ddl_path = os.path.join(app.root_path, 'database/DDL_v2.sql')
+    with open(ddl_path, 'r') as ddl_file:
+        ddl_commands = ddl_file.read()
+    for command in ddl_commands.split(';'):
+        if command.strip():
+            execute_query(db_connection, command)
+    db_connection.close()
+
+init_db()
+
+tables = ['PowerSources', 'Substations', 'Cities', 'LocalGenerators', 'CityHQs', 'PowerSourceSubstationLinks',
               'CitySubstationLinks', 'LocalGeneratorTypes', 'PowerSourceTypes', 'SubstationTypes']
 
 controller = Controller()
-controller.populate_from_sampledata(sampledata)
+controller.load_db()
 
 
 # Webpage routes
@@ -81,7 +96,8 @@ def substationtypes():
 # CRUD and data manipulation routes
 @app.route('/load_sample_data', methods=['POST'])
 def load_sample_data():
-    controller.populate_from_sampledata(sampledata)
+    init_db()
+    controller.load_db()
     return redirect(url_for('root'))
 
 
@@ -151,10 +167,9 @@ def delete_city_hq():
 
 @app.route('/create_city_substation_link', methods=['POST'])
 def create_city_substation_link():
-    link_id = request.form['linkID']
     substation_id = request.form['substationID']
     city_id = request.form['cityID']
-    controller.create_city_substation_link(link_id, city_id, substation_id)
+    controller.create_city_substation_link(city_id, substation_id)
     return redirect(url_for('citysubstationlinks'))
 
 
@@ -164,7 +179,7 @@ def update_city_substation_links():
     substation_ids = request.form.getlist('substation_id[]')
     city_ids = request.form.getlist('city_id[]')
     for i in range(len(link_ids)):
-        controller.update_city_substation_link(link_ids[i], city_ids[i], substation_ids[i])
+        controller.update_city_substation_link(link_ids[i], city_id=city_ids[i], substation_id=substation_ids[i])
     return redirect(url_for('citysubstationlinks'))
 
 
