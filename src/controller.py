@@ -150,14 +150,17 @@ class Controller:
 
     # CRUD for PowerSourceSubstationLink ################################################################
     def create_power_source_substation_link(self, link_id, power_source_id, substation_id):
-        data = PowerSourceSubstationLink(link_id, power_source_id, substation_id)
-        self.power_source_substation_links.append(data)
+        db_connection = connect_to_database()
+        execute_query(db_connection, c_power_source_substation_link, (power_source_id, substation_id))
+        db_connection.close()
+        self.load_db()
 
     def read_power_source_substation_link(self, link_id):
-        for data in self.power_source_substation_links:
-            if data.link_id == link_id:
-                return data
-        return None
+        db_connection = connect_to_database()
+        data = execute_query(db_connection, r_power_source_substation_link, (link_id))
+        db_connection.close()
+        data = data.fetchall()
+        return data
 
     def update_power_source_substation_link(self, link_id, power_source_id=None, substation_id=None):
         data = self.read_power_source_substation_link(link_id)
