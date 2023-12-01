@@ -123,15 +123,18 @@ class Controller:
         return False
 
     # CRUD for PowerSource ######################################################################
-    def create_power_source(self, power_source_id, name, power_source_type_id):
-        data = PowerSource(power_source_id, name, power_source_type_id)
-        self.power_sources.append(data)
+    def create_power_source(self, name, power_source_type_id):
+        db_connection = connect_to_database()
+        execute_query(db_connection, c_power_source, (name, power_source_type_id))
+        db_connection.close()
+        self.load_db()
 
     def read_power_source(self, power_source_id):
-        for data in self.power_sources:
-            if data.power_source_id == power_source_id:
-                return data
-        return None
+        db_connection = connect_to_database()
+        data = execute_query(db_connection, r_power_source_substation_link, (link_id))
+        db_connection.close()
+        data = data.fetchall()
+        return data
 
     def update_power_source(self, power_source_id, name=None, power_source_type_id=None):
         data = self.read_power_source(power_source_id)

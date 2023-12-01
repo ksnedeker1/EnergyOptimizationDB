@@ -1,11 +1,20 @@
 r_power_source_types = 'SELECT * FROM PowerSourceTypes'
+
+
 r_power_sources = 'SELECT * FROM PowerSources'
+c_power_source = 'INSERT INTO PowerSources (name, powerSourceTypeID) VALUES (%s, %s)'
+
+
 r_substation_types = 'SELECT * FROM SubstationTypes'
 r_substations = 'SELECT * FROM Substations'
 r_cities = 'SELECT * FROM Cities'
 r_city_hqs = 'SELECT * FROM CityHQs'
 r_local_generator_types = 'SELECT * FROM LocalGeneratorTypes'
 r_local_generators = 'SELECT * FROM LocalGenerators'
+
+
+
+
 
 r_power_source_substation_links = 'SELECT * FROM PowerSourceSubstationLinks'
 r_power_source_substation_link = 'SELECT * FROM PowerSourceSubstationLinks WHERE linkID = %s'
