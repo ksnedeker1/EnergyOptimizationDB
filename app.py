@@ -113,7 +113,7 @@ def create_city():
     population = request.form['population']
     energy_demand = request.form['energy_demand']
     current_load = request.form['current_load']
-    controller.create_city(city_id, name, population, energy_demand, current_load)
+    controller.create_city(name, population, energy_demand, current_load)
     return redirect(url_for('cities'))
 
 
@@ -142,7 +142,7 @@ def delete_city():
 def create_cityhq():
     city_id = request.form['city_id']
     consumption_policy = request.form['consumption_policy']
-    controller.create_city_hq(hq_id, city_id, consumption_policy)
+    controller.create_city_hq(city_id, consumption_policy)
     return redirect(url_for('cityhqs'))
 
 
@@ -192,7 +192,7 @@ def delete_city_substation_link():
 def create_local_generator():
     city_id = request.form['cityID']
     generator_type_id = request.form['generatorTypeID']
-    controller.create_local_generator(generator_id, city_id, generator_type_id)
+    controller.create_local_generator(city_id, generator_type_id)
     return redirect(url_for('localgenerators'))
 
 
@@ -217,7 +217,7 @@ def delete_local_generator():
 def create_local_generator_type():
     type_ = request.form['type']
     output_load = request.form['output_load']
-    controller.create_local_generator_type(generator_type_id, type_, output_load)
+    controller.create_local_generator_type(type_, output_load)
     return redirect(url_for('localgeneratortypes'))
 
 
@@ -242,7 +242,7 @@ def delete_local_generator_type():
 def create_power_source():
     name = request.form['name']
     power_source_type_id = request.form['power_source_type_id']
-    controller.create_power_source(power_source_id, name, power_source_type_id)
+    controller.create_power_source(name, power_source_type_id)
     return redirect(url_for('powersources'))
 
 
@@ -267,7 +267,7 @@ def delete_power_source():
 def create_power_source_substation_link():
     power_source_id = request.form['power_source_id']
     substation_id = request.form['substation_id']
-    controller.create_power_source_substation_link(link_id, power_source_id, substation_id)
+    controller.create_power_source_substation_link(power_source_id, substation_id)
     return redirect(url_for('powersourcesubstationlinks'))
 
 
@@ -292,7 +292,7 @@ def delete_power_source_substation_link():
 def create_power_source_type():
     type_ = request.form['type']
     output_load = request.form['output_load']
-    controller.create_power_source_type(power_source_type_id, type_, output_load)
+    controller.create_power_source_type(type_, output_load)
     return redirect(url_for('powersourcetypes'))
 
 
@@ -318,7 +318,7 @@ def create_substation():
     name = request.form['name']
     current_load = request.form['current_load']
     substation_type_id = request.form['substation_type_id']
-    controller.create_substation(substation_id, name, current_load, substation_type_id)
+    controller.create_substation(name, current_load, substation_type_id)
     return redirect(url_for('substations'))
 
 
@@ -345,7 +345,7 @@ def delete_substation():
 def create_substation_type():
     size = request.form['size']
     max_load = request.form['max_load']
-    controller.create_substation_type(substation_type_id, size, max_load)
+    controller.create_substation_type(size, max_load)
     return redirect(url_for('substationtypes'))
 
 
