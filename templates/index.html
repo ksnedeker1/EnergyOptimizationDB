@@ -4,11 +4,28 @@
 
 {% block content %}
 <h1>Home</h1>
-
+<div class="page-description">
+    <p>
+        <strong>Welcome to our database-driven website!</strong> Here, you can create and manipulate a database representation of a multi-city power grid.
+        The basis of this database system is to manage and track the energy demands of cities and the supply of energy to them via entities
+        such as power sources, substations, local generators, and more. To get started with demonstrative sample data, click the 'Load Sample
+        Data' button below. If you want to start from scratch, feel free to click 'Clear Database'! If you're curious about the details of
+        a table in the database, visit the page for that database using the nav bar above to see a more specific description. To create, read,
+        update, or delete data from a table, visit the page associated with that table. You can update a row in the table by directly
+        interacting with and modifying the contents of a cell in the table, and then click the 'Update' button. Similarly, you can delete
+        a row in a table by clicking the 'Delete' button on the right side of the row. At the bottom of the page there is a form for creating
+        a new row in the table, simply fill it out and click the 'Add ...' button below it.
+    </p>
+    <p>
+        <i>Note:</i> While our focus this term remained on building the fundamental structure of our database and accompanying website, some
+        features such as the automatic calculation of the current loads through entities or demand scaling with the 'consumption policy' field
+        of City HQs is not yet implemented. We do plan to implement additional UX features such as these after the term concludes, but for now
+        some fields must be calculated manually if accuracy is desired.
+    </p>
+</div>
 <form action="{{ url_for('load_sample_data') }}" method="post">
     <input type="submit" value="Load Sample Data">
 </form>
-
 <form action="{{ url_for('clear_database') }}" method="post">
     <input type="submit" value="Clear Database">
 </form>
