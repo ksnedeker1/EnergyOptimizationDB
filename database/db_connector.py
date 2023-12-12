@@ -1,4 +1,8 @@
-# Adapted from https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/database/db_connector.py
+# From https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/database/db_connector.py
+# Scope: The contents of this file were provided by the OSU Flask Starter App resource available at the link above.
+# Originality: No changes were made other than the removal of the dotenv approach which was replaced with directly-imported string variables.
+# Date: November 22, 2023
+
 import MySQLdb
 import os
 from database.db_credentials import host, user, passwd, db
