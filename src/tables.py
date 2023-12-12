@@ -1,3 +1,6 @@
+# Python definitions for objects representing the row formats of each database table
+# Used in the Controller's internal representation of the database backend
+
 class PowerSourceType:
     def __init__(self, power_source_type_id, type, output_load):
         self.power_source_type_id = power_source_type_id
