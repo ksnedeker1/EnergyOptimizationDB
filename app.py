@@ -1,4 +1,9 @@
-# Adapted from https://github.com/osu-cs340-ecampus/flask-starter-app
+# Adapted from https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/app.py
+# Scope: Some fundamental database initialization/connection and app execution semantics were adapted from the above link.
+# Originality: The app.py from the Flask Starter App repo gave us a starting point, but aside from some lines related to database init/connection
+#              and app execution, the rest is original to our project and it's structure.
+# Date: October 24, 2023
+
 from flask import Flask, render_template, redirect, request, url_for
 from flask_mysqldb import MySQL
 from src.resources.sampledata import sampledata
@@ -37,7 +42,7 @@ controller = Controller()
 controller.load_db()
 
 
-# Webpage routes
+# App render_template routes ################################################################################################################
 @app.route('/')
 def root():
     return render_template('index.html', tables=tables)
@@ -45,12 +50,14 @@ def root():
 
 @app.route('/powersources')
 def powersources():
-    return render_template('powersources.html', tables=tables, data=controller.power_sources)
+    power_source_types = controller.get_power_source_types()
+    return render_template('powersources.html', tables=tables, data=controller.power_sources, power_source_types=power_source_types)
 
 
 @app.route('/substations')
 def substations():
-    return render_template('substations.html', tables=tables, data=controller.substations)
+    substation_types = controller.get_substation_types()
+    return render_template('substations.html', tables=tables, data=controller.substations, substation_types=substation_types)
 
 
 @app.route('/cities')
@@ -60,22 +67,29 @@ def cities():
 
 @app.route('/localgenerators')
 def localgenerators():
-    return render_template('localgenerators.html', tables=tables, data=controller.local_generators)
+    cities = controller.get_cities()
+    generator_types = controller.get_local_generator_types()
+    return render_template('localgenerators.html', tables=tables, data=controller.local_generators, cities=cities, generator_types=generator_types)
 
 
 @app.route('/cityhqs')
 def cityhqs():
-    return render_template('cityhqs.html', tables=tables, data=controller.city_hqs)
+    cities = controller.get_cities()
+    return render_template('cityhqs.html', tables=tables, data=controller.city_hqs, cities=cities)
 
 
 @app.route('/powersourcesubstationlinks')
 def powersourcesubstationlinks():
-    return render_template('powersourcesubstationlinks.html', tables=tables, data=controller.power_source_substation_links)
+    power_sources = controller.get_power_sources()
+    substations = controller.get_substations()
+    return render_template('powersourcesubstationlinks.html', tables=tables, data=controller.power_source_substation_links, power_sources=power_sources, substations=substations)
 
 
 @app.route('/citysubstationlinks')
 def citysubstationlinks():
-    return render_template('citysubstationlinks.html', tables=tables, data=controller.city_substation_links)
+    cities = controller.get_cities()
+    substations = controller.get_substations()
+    return render_template('citysubstationlinks.html', tables=tables, data=controller.city_substation_links, cities=cities, substations=substations)
 
 
 @app.route('/localgeneratortypes')
@@ -93,7 +107,7 @@ def substationtypes():
     return render_template('substationtypes.html', tables=tables, data=controller.substation_types)
 
 
-# CRUD and data manipulation routes
+# CRUD and data manipulation routes ################################################################################################################
 @app.route('/load_sample_data', methods=['POST'])
 def load_sample_data():
     init_db()
@@ -132,8 +146,6 @@ def update_cities():
 @app.route('/delete_city', methods=['POST'])
 def delete_city():
     city_id = request.form['delete_city_id']
-    print(city_id, type(city_id))
-    print(type(controller.cities[0].city_id))
     controller.delete_city(city_id)
     return redirect(url_for('cities'))
 
