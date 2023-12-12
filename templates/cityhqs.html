@@ -3,45 +3,65 @@
 {% block title %}CityHQs Table{% endblock %}
 
 {% block content %}
-    <h1>CityHQs Table</h1>
-    <form action="{{ url_for('update_city_hqs') }}" method="post">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>HQ ID</th>
-                    <th>City ID</th>
-                    <th>Consumption Policy</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data %}
-                <tr>
-                    <td><input type="hidden" name="hq_id[]" value="{{ item.hq_id }}">{{ item.hq_id }}</td>
-                    <td><input type="text" name="city_id[]" value="{{ item.city_id }}"></td>
-                    <td><input type="text" name="consumption_policy[]" value="{{ item.consumption_policy }}"></td>
-                    <td>
-                        <button type="submit" formaction="{{ url_for('delete_city_hq') }}" formmethod="post" name="delete_hq_id" value="{{ item.hq_id }}">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="form-action">
-            <input type="submit" value="Update CityHQs">
-        </div>
-    </form>
-    <form action="{{ url_for('create_cityhq') }}" method="post" class="create-form">
-        <div class="form-group">
-            <label for="city_id">City ID:</label>
-            <input type="text" id="city_id" name="city_id" required>
-        </div>
-        <div class="form-group">
-            <label for="consumption_policy">Consumption Policy:</label>
-            <input type="text" id="consumption_policy" name="consumption_policy" required>
-        </div>
-        <div class="form-action">
-            <input type="submit" value="Add CityHQ">
-        </div>
-    </form>
+<h1>CityHQs Table</h1>
+<div class="page-description">
+    <p>City HQs allow you to set a consumption policy factor that scales the demand of the city. This allows you to simulate
+        city-wide energy efficiency habits (or lack thereof).
+    </p>
+    <ul>
+        <li><strong>City:</strong> The name of the target city.</li>
+        <li><strong>Consumption Policy:</strong> A energy demand scaling factor between 0.0 and 1.0.</li>
+    </ul>
+</div>
+<form action="{{ url_for('update_city_hqs') }}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>HQ ID</th>
+                <th>City</th>
+                <th>Consumption Policy</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td><input type="hidden" name="hq_id[]" value="{{ item.hq_id }}">{{ item.hq_id }}</td>
+                <td>
+                    <select name="city_id[]" required>
+                        {% for id, name in cities %}
+                        <option value="{{ id }}" {% if id == item.city_id %} selected {% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td><input type="text" name="consumption_policy[]" value="{{ item.consumption_policy }}"></td>
+                <td>
+                    <button type="submit" formaction="{{ url_for('delete_city_hq') }}" formmethod="post" name="delete_hq_id" value="{{ item.hq_id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-action">
+        <input type="submit" value="Update CityHQs">
+    </div>
+</form>
+<form action="{{ url_for('create_cityhq') }}" method="post" class="create-form">
+    <h3>Create a New City HQ:</h3>
+    <div class="form-group">
+        <label for="city_id">City:</label>
+        <select id="city_id" name="city_id" required>
+            {% for id, name in cities %}
+            <option value="{{ id }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="consumption_policy">Consumption Policy:</label>
+        <input type="text" id="consumption_policy" name="consumption_policy" required>
+    </div>
+    <div class="form-action">
+        <input type="submit" value="Add CityHQ">
+    </div>
+</form>
 {% endblock %}

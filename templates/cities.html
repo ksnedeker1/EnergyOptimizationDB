@@ -4,6 +4,15 @@
 
 {% block content %}
 <h1>Cities Table</h1>
+<div class="page-description">
+    <p>Cities are the endpoints of your power system. Your goal is to supply the necessary power demanded by each city as efficiently as possible.</p>
+    <ul>
+        <li><strong>Name:</strong> The name of the city.</li>
+        <li><strong>Population:</strong> Total number of inhabitants in the city.</li>
+        <li><strong>Energy Demand:</strong> The total energy requirement in megawatts.</li>
+        <li><strong>Current Load:</strong> The current amount of energy being supplied to the city in megawatts.</li>
+    </ul>
+</div>
     <form action="{{ url_for('update_cities') }}" method="post">
         <table border="1">
             <thead>
@@ -25,7 +34,6 @@
                 <td><input type="text" name="energy_demand[]" value="{{ item.energy_demand }}"></td>
                 <td><input type="text" name="current_load[]" value="{{ item.current_load }}"></td>
                 <td>
-                    <!-- Delete button correction -->
                     <button type="submit" formaction="{{ url_for('delete_city') }}" formmethod="post" name="delete_city_id" value="{{ item.city_id }}">Delete</button>
                 </td>
             </tr>
@@ -37,6 +45,7 @@
         </div>
     </form>
     <form action="{{ url_for('create_city') }}" method="post" class="create-form">
+        <h3>Create a New City:</h3>
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>

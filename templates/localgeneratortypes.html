@@ -3,45 +3,56 @@
 {% block title %}LocalGeneratorTypes Table{% endblock %}
 
 {% block content %}
-    <h1>LocalGeneratorTypes Table</h1>
-    <form action="{{ url_for('update_local_generator_types') }}" method="post">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Generator Type ID</th>
-                    <th>Type</th>
-                    <th>Output Load</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data %}
-                <tr>
-                    <td><input type="hidden" name="generator_type_id[]" value="{{ item.generator_type_id }}">{{ item.generator_type_id }}</td>
-                    <td><input type="text" name="type[]" value="{{ item.type }}"></td>
-                    <td><input type="text" name="output_load[]" value="{{ item.output_load }}" step="any"></td>
-                    <td>
-                        <button type="submit" formaction="{{ url_for('delete_local_generator_type') }}" formmethod="post" name="delete_generator_type_id" value="{{ item.generator_type_id }}">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="form-action">
-            <input type="submit" value="Update Generator Types">
-        </div>
-    </form>
-    <form action="{{ url_for('create_local_generator_type') }}" method="post" class="create-form">
-        <div class="form-group">
-            <label for="type">Type:</label>
-            <input type="text" id="type" name="type" required>
-        </div>
-        <div class="form-group">
-            <label for="output_load">Output Load:</label>
-            <input type="text" id="output_load" name="output_load" required>
-        </div>
-        <div class="form-action">
-            <input type="submit" value="Add Generator Type">
-        </div>
-    </form>
+<h1>LocalGeneratorTypes Table</h1>
+<div class="page-description">
+    <p>Local Generators provide a means of supplying smaller amounts of energy directly to a city. This table provides the
+        definitions for the range of Local Generator types available. For example, Rooftop Solar is an available Local Generator
+        type in the sample data and supplies 50MW of energy to the target city.
+    </p>
+    <ul>
+        <li><strong>Type:</strong> The name for a local generator type.</li>
+        <li><strong>Output Load:</strong> The amount of energy this local generator type can supply in megawatts.</li>
+    </ul>
+</div>
+<form action="{{ url_for('update_local_generator_types') }}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Generator Type ID</th>
+                <th>Type</th>
+                <th>Output Load</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td><input type="hidden" name="generator_type_id[]" value="{{ item.generator_type_id }}">{{ item.generator_type_id }}</td>
+                <td><input type="text" name="type[]" value="{{ item.type }}"></td>
+                <td><input type="text" name="output_load[]" value="{{ item.output_load }}" step="any"></td>
+                <td>
+                    <button type="submit" formaction="{{ url_for('delete_local_generator_type') }}" formmethod="post" name="delete_generator_type_id" value="{{ item.generator_type_id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-action">
+        <input type="submit" value="Update Generator Types">
+    </div>
+</form>
+<form action="{{ url_for('create_local_generator_type') }}" method="post" class="create-form">
+    <h3>Create a New Local Generator Type:</h3>
+    <div class="form-group">
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type" required>
+    </div>
+    <div class="form-group">
+        <label for="output_load">Output Load:</label>
+        <input type="text" id="output_load" name="output_load" required>
+    </div>
+    <div class="form-action">
+        <input type="submit" value="Add Generator Type">
+    </div>
+</form>
 {% endblock %}

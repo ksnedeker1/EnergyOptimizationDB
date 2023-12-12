@@ -3,45 +3,56 @@
 {% block title %}SubstationTypes Table{% endblock %}
 
 {% block content %}
-    <h1>SubstationTypes Table</h1>
-    <form action="{{ url_for('update_substation_types') }}" method="post">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Substation Type ID</th>
-                    <th>Size</th>
-                    <th>Max Load</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data %}
-                <tr>
-                    <td><input type="hidden" name="substation_type_id[]" value="{{ item.substation_type_id }}">{{ item.substation_type_id }}</td>
-                    <td><input type="text" name="size[]" value="{{ item.size }}"></td>
-                    <td><input type="text" name="max_load[]" value="{{ item.max_load }}"></td>
-                    <td>
-                        <button type="submit" formaction="{{ url_for('delete_substation_type') }}" formmethod="post" name="delete_substation_type_id" value="{{ item.substation_type_id }}">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="form-action">
-            <input type="submit" value="Update Substation Types">
-        </div>
-    </form>
-    <form action="{{ url_for('create_substation_type') }}" method="post" class="create-form">
-        <div class="form-group">
-            <label for="size">Size:</label>
-            <input type="text" id="size" name="size" required>
-        </div>
-        <div class="form-group">
-            <label for="max_load">Max Load:</label>
-            <input type="text" id="max_load" name="max_load" required>
-        </div>
-        <div class="form-action">
-            <input type="submit" value="Add Substation Type">
-        </div>
-    </form>
+<h1>SubstationTypes Table</h1>
+<div class="page-description">
+    <p>Substations provide a means of converting and distributing high voltage energy from Power Sources to Cities. This table provides the
+        definitions for the range of Substation Sizes available. For example, 'Medium' is an available Power Source type in the sample
+        data and is capable of handling 1000MW of throughput energy.
+    </p>
+    <ul>
+        <li><strong>Size:</strong> The name for a Substation size class.</li>
+        <li><strong>Max Load:</strong> The amount of energy Substations of this size can handle in megawatts.</li>
+    </ul>
+</div>
+<form action="{{ url_for('update_substation_types') }}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Substation Type ID</th>
+                <th>Size</th>
+                <th>Max Load</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td><input type="hidden" name="substation_type_id[]" value="{{ item.substation_type_id }}">{{ item.substation_type_id }}</td>
+                <td><input type="text" name="size[]" value="{{ item.size }}"></td>
+                <td><input type="text" name="max_load[]" value="{{ item.max_load }}"></td>
+                <td>
+                    <button type="submit" formaction="{{ url_for('delete_substation_type') }}" formmethod="post" name="delete_substation_type_id" value="{{ item.substation_type_id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-action">
+        <input type="submit" value="Update Substation Types">
+    </div>
+</form>
+<form action="{{ url_for('create_substation_type') }}" method="post" class="create-form">
+    <h3>Create a New Substation Type:</h3>
+    <div class="form-group">
+        <label for="size">Size:</label>
+        <input type="text" id="size" name="size" required>
+    </div>
+    <div class="form-group">
+        <label for="max_load">Max Load:</label>
+        <input type="text" id="max_load" name="max_load" required>
+    </div>
+    <div class="form-action">
+        <input type="submit" value="Add Substation Type">
+    </div>
+</form>
 {% endblock %}

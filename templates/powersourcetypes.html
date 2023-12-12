@@ -3,35 +3,45 @@
 {% block title %}PowerSourceTypes Table{% endblock %}
 
 {% block content %}
-    <h1>PowerSourceTypes Table</h1>
-    <form action="{{ url_for('update_power_source_types') }}" method="post">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Power Source Type ID</th>
-                    <th>Type</th>
-                    <th>Output Load</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data %}
-                <tr>
-                    <td><input type="hidden" name="power_source_type_id[]" value="{{ item.power_source_type_id }}">{{ item.power_source_type_id }}</td>
-                    <td><input type="text" name="type[]" value="{{ item.type }}"></td>
-                    <td><input type="text" name="output_load[]" value="{{ item.output_load }}"></td>
-                    <td>
-                        <button type="submit" formaction="{{ url_for('delete_power_source_type') }}" formmethod="post" name="delete_power_source_type_id" value="{{ item.power_source_type_id }}">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="form-action">
-            <input type="submit" value="Update Power Source Types">
-        </div>
-    </form>
-    <form action="{{ url_for('create_power_source_type') }}" method="post" class="create-form">
+<h1>PowerSourceTypes Table</h1>
+<div class="page-description">
+    <p>Power Sources are the main method of generating energy. This table provides the definitions for the range of Power Source
+        types available. For example, Large Coal is an available Power Source type in the sample data and supplies 1200MW of energy.
+    </p>
+    <ul>
+        <li><strong>Type:</strong> The name for a Power Source type.</li>
+        <li><strong>Output Load:</strong> The amount of energy this Power Source type can supply in megawatts.</li>
+    </ul>
+</div>
+<form action="{{ url_for('update_power_source_types') }}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Power Source Type ID</th>
+                <th>Type</th>
+                <th>Output Load</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td><input type="hidden" name="power_source_type_id[]" value="{{ item.power_source_type_id }}">{{ item.power_source_type_id }}</td>
+                <td><input type="text" name="type[]" value="{{ item.type }}"></td>
+                <td><input type="text" name="output_load[]" value="{{ item.output_load }}"></td>
+                <td>
+                    <button type="submit" formaction="{{ url_for('delete_power_source_type') }}" formmethod="post" name="delete_power_source_type_id" value="{{ item.power_source_type_id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-action">
+        <input type="submit" value="Update Power Source Types">
+    </div>
+</form>
+<form action="{{ url_for('create_power_source_type') }}" method="post" class="create-form">
+    <h3>Create a New Power Source Type:</h3>
     <div class="form-group">
         <label for="type">Type:</label>
         <input type="text" id="type" name="type" required>

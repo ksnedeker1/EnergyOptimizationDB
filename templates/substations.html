@@ -3,51 +3,73 @@
 {% block title %}Substations Table{% endblock %}
 
 {% block content %}
-    <h1>Substations Table</h1>
-    <form action="{{ url_for('update_substations') }}" method="post">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Substation ID</th>
-                    <th>Name</th>
-                    <th>Current Load</th>
-                    <th>Substation Type ID</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data %}
-                <tr>
-                    <td><input type="hidden" name="substation_id[]" value="{{ item.substation_id }}">{{ item.substation_id }}</td>
-                    <td><input type="text" name="name[]" value="{{ item.name }}"></td>
-                    <td><input type="text" name="current_load[]" value="{{ item.current_load }}"></td>
-                    <td><input type="text" name="substation_type_id[]" value="{{ item.substation_type_id }}"></td>
-                    <td>
-                        <button type="submit" formaction="{{ url_for('delete_substation') }}" formmethod="post" name="delete_substation_id" value="{{ item.substation_id }}">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="form-action">
-            <input type="submit" value="Update Substations">
-        </div>
-    </form>
-    <form action="{{ url_for('create_substation') }}" method="post" class="create-form">
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-            <label for="current_load">Current Load:</label>
-            <input type="text" id="current_load" name="current_load" required>
-        </div>
-        <div class="form-group">
-            <label for="substation_type_id">Substation Type ID:</label>
-            <input type="text" id="substation_type_id" name="substation_type_id" required>
-        </div>
-        <div class="form-action">
-            <input type="submit" value="Add Substation">
-        </div>
-    </form>
+<h1>Substations Table</h1>
+<div class="page-description">
+    <p>Substations provide a means of converting and distributing high voltage energy from Power Sources to Cities.
+    </p>
+    <ul>
+        <li><strong>Name:</strong> A unique name for the Substation.</li>
+        <li><strong>Current Load:</strong> The amount of input energy currently received by this Substation.</li>
+        <li><strong>Substation Size:</strong> The size class of the Substation which determines the maximum amount of energy load it can handle in megawatts.</li>
+    </ul>
+</div>
+<form action="{{ url_for('update_substations') }}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Substation ID</th>
+                <th>Name</th>
+                <th>Current Load</th>
+                <th>Substation Size</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td><input type="hidden" name="substation_id[]" value="{{ item.substation_id }}">{{ item.substation_id }}</td>
+                <td><input type="text" name="name[]" value="{{ item.name }}"></td>
+                <td><input type="text" name="current_load[]" value="{{ item.current_load }}"></td>
+                <td>
+                    <select name="substation_type_id[]">
+                        <option value="">NULL</option>
+                        {% for id, size in substation_types %}
+                        <option value="{{ id }}" {% if id == item.substation_type_id %} selected {% endif %}>{{ size }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" formaction="{{ url_for('delete_substation') }}" formmethod="post" name="delete_substation_id" value="{{ item.substation_id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-action">
+        <input type="submit" value="Update Substations">
+    </div>
+</form>
+<form action="{{ url_for('create_substation') }}" method="post" class="create-form">
+    <h3>Create a New Substation:</h3>
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+        <label for="current_load">Current Load:</label>
+        <input type="text" id="current_load" name="current_load" required>
+    </div>
+    <div class="form-group">
+        <label for="substation_type_id">Substation Size:</label>
+        <select id="substation_type_id" name="substation_type_id">
+            <option value="">NULL</option>
+            {% for id, size in substation_types %}
+            <option value="{{ id }}">{{ size }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-action">
+        <input type="submit" value="Add Substation">
+    </div>
+</form>
 {% endblock %}

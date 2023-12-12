@@ -3,45 +3,74 @@
 {% block title %}PowerSourceSubstationLinks Table{% endblock %}
 
 {% block content %}
-    <h1>PowerSourceSubstationLinks Table</h1>
-    <form action="{{ url_for('update_power_source_substation_links') }}" method="post">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Link ID</th>
-                    <th>Power Source ID</th>
-                    <th>Substation ID</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in data %}
-                <tr>
-                    <td><input type="hidden" name="link_id[]" value="{{ item.link_id }}">{{ item.link_id }}</td>
-                    <td><input type="text" name="power_source_id[]" value="{{ item.power_source_id }}"></td>
-                    <td><input type="text" name="substation_id[]" value="{{ item.substation_id }}"></td>
-                    <td>
-                        <button type="submit" formaction="{{ url_for('delete_power_source_substation_link') }}" formmethod="post" name="delete_link_id" value="{{ item.link_id }}">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="form-action">
-            <input type="submit" value="Update Links">
-        </div>
-    </form>
-    <form action="{{ url_for('create_power_source_substation_link') }}" method="post" class="create-form">
-        <div class="form-group">
-            <label for="power_source_id">Power Source ID:</label>
-            <input type="text" id="power_source_id" name="power_source_id" required>
-        </div>
-        <div class="form-group">
-            <label for="substation_id">Substation ID:</label>
-            <input type="text" id="substation_id" name="substation_id" required>
-        </div>
-        <div class="form-action">
-            <input type="submit" value="Add Link">
-        </div>
-    </form>
+<h1>PowerSourceSubstationLinks Table</h1>
+<div class="page-description">
+    <p>PowerSource-Substation Links represent the flow of power from one or more Power Sources to one or more Substations.
+    </p>
+    <ul>
+        <li><strong>Power Source:</strong> The name of the Power Source supplying the energy.</li>
+        <li><strong>Substation:</strong> The name of the Substation receiving the energy.</li>
+    </ul>
+</div>
+<form action="{{ url_for('update_power_source_substation_links') }}" method="post">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Link ID</th>
+                <th>Power Source</th>
+                <th>Substation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td><input type="hidden" name="link_id[]" value="{{ item.link_id }}">{{ item.link_id }}</td>
+                <td>
+                    <select name="power_source_id[]" required>
+                        {% for id, name in power_sources %}
+                        <option value="{{ id }}" {% if id == item.power_source_id %} selected {% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select name="substation_id[]" required>
+                        {% for id, name in substations %}
+                        <option value="{{ id }}" {% if id == item.substation_id %} selected {% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" formaction="{{ url_for('delete_power_source_substation_link') }}" formmethod="post" name="delete_link_id" value="{{ item.link_id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-action">
+        <input type="submit" value="Update Links">
+    </div>
+</form>
+<form action="{{ url_for('create_power_source_substation_link') }}" method="post" class="create-form">
+    <h3>Create a New PowerSource-Substation Link:</h3>
+    <div class="form-group">
+        <label for="power_source_id">Power Source:</label>
+        <select id="power_source_id" name="power_source_id" required>
+            {% for id, name in power_sources %}
+            <option value="{{ id }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="substation_id">Substation:</label>
+        <select id="substation_id" name="substation_id" required>
+            {% for id, name in substations %}
+            <option value="{{ id }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-action">
+        <input type="submit" value="Add Link">
+    </div>
+</form>
 {% endblock %}
