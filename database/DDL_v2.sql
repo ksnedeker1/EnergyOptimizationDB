@@ -239,8 +239,8 @@ INSERT INTO `LocalGeneratorTypes` (`type`, `outputLoad`) VALUES ('Rooftop Solar'
 -- Insert sample data into LocalGenerators (Intersection Table)
 INSERT INTO `LocalGenerators` (`cityID`, `generatorTypeID`)
 VALUES
-    (1, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar')),
-    (2, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar')),
+    (3, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar')),
+    (3, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar')),
     (3, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar'));
 
 
