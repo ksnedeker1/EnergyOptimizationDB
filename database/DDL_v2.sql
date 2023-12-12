@@ -169,7 +169,7 @@ CREATE TABLE `PowerSourceSubstationLinks` (
 -- #################################################################################
 DROP TABLE IF EXISTS `CitySubstationLinks`;
 CREATE TABLE `CitySubstationLinks` (
-  `linkID` INT(11) NOT NULL,
+  `linkID` INT(11) NOT NULL AUTO_INCREMENT,
   `substationID` INT(11) NOT NULL,
   `cityID` INT(11) NOT NULL,
   PRIMARY KEY (`linkID`),
@@ -182,66 +182,87 @@ CREATE TABLE `CitySubstationLinks` (
 );
 
 
+
 -- Insert sample data into PowerSourceTypes
 -- Four PowerSourceTypes with varying types and outputLoads
-INSERT INTO `PowerSourceTypes` (`powerSourceTypeID`, `type`, `outputLoad`) VALUES (1, 'Large Coal', 1200.00);
-INSERT INTO `PowerSourceTypes` (`powerSourceTypeID`, `type`, `outputLoad`) VALUES (2, 'Large Nuclear', 2000.00);
-INSERT INTO `PowerSourceTypes` (`powerSourceTypeID`, `type`, `outputLoad`) VALUES (3, 'Medium Hydro', 700.00);
-INSERT INTO `PowerSourceTypes` (`powerSourceTypeID`, `type`, `outputLoad`) VALUES (4, 'Medium Solar', 125.00);
+INSERT INTO `PowerSourceTypes` (`type`, `outputLoad`) 
+VALUES 
+  ('Large Coal', 1200.00),
+  ('Large Nuclear', 2000.00),
+  ('Medium Hydro', 700.00),
+  ('Medium Solar', 125.00);
 
 -- Insert sample data into PowerSources
 -- Six PowerSources entities with varying types and outputLoads
-INSERT INTO `PowerSources` (`powerSourceID`, `name`, `powerSourceTypeID`) VALUES (1, 'LargeCoal1', 1);
-INSERT INTO `PowerSources` (`powerSourceID`, `name`, `powerSourceTypeID`) VALUES (2, 'LargeCoal2', 1);
-INSERT INTO `PowerSources` (`powerSourceID`, `name`, `powerSourceTypeID`) VALUES (3, 'LargeNuclear1', 2);
-INSERT INTO `PowerSources` (`powerSourceID`, `name`, `powerSourceTypeID`) VALUES (4, 'MediumHydro1', 3);
-INSERT INTO `PowerSources` (`powerSourceID`, `name`, `powerSourceTypeID`) VALUES (5, 'MediumSolar1', 4);
-INSERT INTO `PowerSources` (`powerSourceID`, `name`, `powerSourceTypeID`) VALUES (6, 'MediumSolar2', 4);
+INSERT INTO `PowerSources` (`name`, `powerSourceTypeID`) 
+VALUES
+  ('LargeCoal1', (SELECT `powerSourceTypeID` FROM `PowerSourceTypes` WHERE `type` = 'Large Coal')),
+  ('LargeCoal2', (SELECT `powerSourceTypeID` FROM `PowerSourceTypes` WHERE `type` = 'Large Coal')),
+  ('LargeNuclear1', (SELECT `powerSourceTypeID` FROM `PowerSourceTypes` WHERE `type` = 'Large Nuclear')),
+  ('MediumHydro1', (SELECT `powerSourceTypeID` FROM `PowerSourceTypes` WHERE `type` = 'Medium Hydro')),
+  ('MediumSolar1', (SELECT `powerSourceTypeID` FROM `PowerSourceTypes` WHERE `type` = 'Medium Solar')),
+  ('MediumSolar2', (SELECT `powerSourceTypeID` FROM `PowerSourceTypes` WHERE `type` = 'Medium Solar'));
 
 -- Insert sample data into SubstationTypes
-INSERT INTO `SubstationTypes` (`substationTypeID`, `size`, `maxLoad`) VALUES (1, 'Mega', 2500.00);
-INSERT INTO `SubstationTypes` (`substationTypeID`, `size`, `maxLoad`) VALUES (2, 'Medium', 1000.00);
-INSERT INTO `SubstationTypes` (`substationTypeID`, `size`, `maxLoad`) VALUES (3, 'Small', 500.00);
-
+INSERT INTO `SubstationTypes` (`substationTypeID`, `size`, `maxLoad`)
+VALUES
+    (1, 'Mega', 2500.00),
+    (2, 'Medium', 1000.00),
+    (3, 'Small', 500.00);
 
 -- Insert sample data into Substations
-INSERT INTO `Substations` (`substationID`, `name`, `currentLoad`, `substationTypeID`) VALUES (1, 'SnNgSub1', 2400, 1);
-INSERT INTO `Substations` (`substationID`, `name`, `currentLoad`, `substationTypeID`) VALUES (2, 'SnSub1', 2000, 1);
-INSERT INTO `Substations` (`substationID`, `name`, `currentLoad`, `substationTypeID`) VALUES (3, 'NgSub1', 700, 2);
-INSERT INTO `Substations` (`substationID`, `name`, `currentLoad`, `substationTypeID`) VALUES (4, 'DaSub1', 250, 3);
+INSERT INTO `Substations` (`name`, `currentLoad`, `substationTypeID`)
+VALUES
+  ('SnNgSub1', 2400, (SELECT `substationTypeID` FROM `SubstationTypes` WHERE `size` = 'Mega')),
+  ('SnSub1', 2000, (SELECT `substationTypeID` FROM `SubstationTypes` WHERE `size` = 'Mega')),
+  ('NgSub1', 700, (SELECT `substationTypeID` FROM `SubstationTypes` WHERE `size` = 'Medium')),
+  ('DaSub1', 250, (SELECT `substationTypeID` FROM `SubstationTypes` WHERE `size` = 'Small'));
+
 
 -- Insert sample data into Cities
-INSERT INTO `Cities` (`cityID`, `name`, `population`, `energyDemand`, `currentLoad`) VALUES (1, 'Snedekeria', 3200000, 2922.37, 3200);
-INSERT INTO `Cities` (`cityID`, `name`, `population`, `energyDemand`, `currentLoad`) VALUES (2, 'Ngopolis', 2000000, 1826.48, 1900);
-INSERT INTO `Cities` (`cityID`, `name`, `population`, `energyDemand`, `currentLoad`) VALUES (3, 'Databaseburg', 400000, 365.30, 400);
+INSERT INTO `Cities` (`name`, `population`, `energyDemand`, `currentLoad`)
+VALUES
+    ('Snedekeria', 3200000, 2922.37, 3200),
+    ('Ngopolis', 2000000, 1826.48, 1900),
+    ('Databaseburg', 400000, 365.30, 400);
 
 -- Insert sample data into CityHQs
-INSERT INTO `CityHQs` (`hqID`, `cityID`, `consumptionPolicy`) VALUES (1, 1, 0.50);
-INSERT INTO `CityHQs` (`hqID`, `cityID`, `consumptionPolicy`) VALUES (2, 2, 0.50);
-INSERT INTO `CityHQs` (`hqID`, `cityID`, `consumptionPolicy`) VALUES (3, 3, 0.50);
+INSERT INTO `CityHQs` (`cityID`, `consumptionPolicy`)
+VALUES
+    ((SELECT `cityID` FROM `Cities` WHERE `name` = 'Snedekeria'), 0.50),
+    ((SELECT `cityID` FROM `Cities` WHERE `name` = 'Ngopolis'), 0.50),
+    ((SELECT `cityID` FROM `Cities` WHERE `name` = 'Databaseburg'), 0.50);
 
--- Insert sample data into LocalGeneratorTypes
-INSERT INTO `LocalGeneratorTypes` (`generatorTypeID`, `type`, `outputLoad`) VALUES (1, 'Rooftop Solar', 50.00);
+-- Insert sample data into LocalGeneratorTypes 
+INSERT INTO `LocalGeneratorTypes` (`type`, `outputLoad`) VALUES ('Rooftop Solar', 50.00);
 
--- Insert sample data into LocalGenerators
-INSERT INTO `LocalGenerators` (`generatorID`, `cityID`, `generatorTypeID`) VALUES (1, 3, 1);
-INSERT INTO `LocalGenerators` (`generatorID`, `cityID`, `generatorTypeID`) VALUES (2, 3, 1);
-INSERT INTO `LocalGenerators` (`generatorID`, `cityID`, `generatorTypeID`) VALUES (3, 3, 1);
+-- Insert sample data into LocalGenerators (Intersection Table)
+INSERT INTO `LocalGenerators` (`cityID`, `generatorTypeID`)
+VALUES
+    (3, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar')),
+    (3, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar')),
+    (3, (SELECT `generatorTypeID` FROM `LocalGeneratorTypes` WHERE `type` = 'Rooftop Solar'));
 
--- Insert sample data into PowerSourceSubstationLinks
-INSERT INTO `PowerSourceSubstationLinks` (`linkID`, `powerSourceID`, `substationID`) VALUES (1, 1, 1);
-INSERT INTO `PowerSourceSubstationLinks` (`linkID`, `powerSourceID`, `substationID`) VALUES (2, 2, 1);
-INSERT INTO `PowerSourceSubstationLinks` (`linkID`, `powerSourceID`, `substationID`) VALUES (3, 3, 2);
-INSERT INTO `PowerSourceSubstationLinks` (`linkID`, `powerSourceID`, `substationID`) VALUES (4, 4, 3);
-INSERT INTO `PowerSourceSubstationLinks` (`linkID`, `powerSourceID`, `substationID`) VALUES (5, 5, 4);
-INSERT INTO `PowerSourceSubstationLinks` (`linkID`, `powerSourceID`, `substationID`) VALUES (6, 6, 4);
 
--- Insert sample data into CitySubstationLinks
-INSERT INTO `CitySubstationLinks` (`linkID`, `substationID`, `cityID`) VALUES (1, 1, 1);
-INSERT INTO `CitySubstationLinks` (`linkID`, `substationID`, `cityID`) VALUES (2, 1, 2);
-INSERT INTO `CitySubstationLinks` (`linkID`, `substationID`, `cityID`) VALUES (3, 2, 1);
-INSERT INTO `CitySubstationLinks` (`linkID`, `substationID`, `cityID`) VALUES (4, 3, 2);
-INSERT INTO `CitySubstationLinks` (`linkID`, `substationID`, `cityID`) VALUES (5, 4, 3);
+-- Insert sample data into PowerSourceSubstationLinks (Intersection Table)
+INSERT INTO `PowerSourceSubstationLinks` (`powerSourceID`, `substationID`)
+VALUES
+    ((SELECT `powerSourceID` FROM `PowerSources` WHERE `name` = 'LargeCoal1'), 1),
+    ((SELECT `powerSourceID` FROM `PowerSources` WHERE `name` = 'LargeCoal2'), 1),
+    ((SELECT `powerSourceID` FROM `PowerSources` WHERE `name` = 'LargeNuclear1'), 2),
+    ((SELECT `powerSourceID` FROM `PowerSources` WHERE `name` = 'MediumHydro1'), 3),
+    ((SELECT `powerSourceID` FROM `PowerSources` WHERE `name` = 'MediumSolar1'), 4),
+    ((SELECT `powerSourceID` FROM `PowerSources` WHERE `name` = 'MediumSolar2'), 4);
+
+-- Insert sample data into CitySubstationLinks (Intersection Table)
+INSERT INTO `CitySubstationLinks` (`substationID`, `cityID`)
+VALUES
+    ((SELECT `substationID` FROM `Substations` WHERE `name` = 'SnNgSub1'), 1),
+    ((SELECT `substationID` FROM `Substations` WHERE `name` = 'SnNgSub1'), 2),
+    ((SELECT `substationID` FROM `Substations` WHERE `name` = 'SnSub1'), 1),
+    ((SELECT `substationID` FROM `Substations` WHERE `name` = 'NgSub1'), 2),
+    ((SELECT `substationID` FROM `Substations` WHERE `name` = 'DaSub1'), 3);
+
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
